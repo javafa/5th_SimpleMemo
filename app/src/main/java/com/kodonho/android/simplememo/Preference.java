@@ -3,6 +3,10 @@ package com.kodonho.android.simplememo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Preference {
     private static final String FILENAME = "simplememo";
@@ -29,6 +33,15 @@ public class Preference {
     public static String read(String key, Context context){
         SharedPreferences pref = context.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
         String result = pref.getString(key, "");
+        return result;
+    }
+    // 메모 목록을 가져오는 함수
+    public static List<String> getList(Context context){
+        List<String> result = new ArrayList<>();
+        int count = Preference.getCount(context);
+        for(int i=1; i<=count; i++){
+            result.add(Preference.read("memo_"+i,context));
+        }
         return result;
     }
 }

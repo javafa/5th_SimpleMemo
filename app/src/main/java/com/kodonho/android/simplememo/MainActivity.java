@@ -4,28 +4,40 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
+    RecyclerView recyclerView;
+    CustomAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 1. 리사이클러뷰를 연결
+        recyclerView = findViewById(R.id.recyclerView);
+        // 2. 데이터생성
+        List<String> list = Preference.getList(this);
+        // 3. 아답터 생성
+        adapter = new CustomAdapter();
+        // 4. 아답터를 리사이클러뷰에 연결
+        recyclerView.setAdapter(adapter);
+        // 5. 레이아웃 매니저를 연결
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // 6. 아답터에 데이터 넣기 & 갱신 자동
+        adapter.setDataAndRefresh(list);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        // 1. 현재 메모 번호를 가져와서, 번호 개수만큼 반복하면서 출력
-        int count = Preference.getCount(this);
-        for(int i=1; i<=count; i++){
-            String memo = Preference.read("memo_"+i,this);
-            Log.d("SimpleMemo","no="+i+", "+memo);
-        }
-
+        List<String> list = Preference.getList(this);
+        adapter.setDataAndRefresh(list);
     }
 
     // 액티비티 이동
