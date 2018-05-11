@@ -18,8 +18,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String memo = Preference.read(this);
-        Log.d("SimpleMemo","memo="+memo);
+
+        // 1. 현재 메모 번호를 가져와서, 번호 개수만큼 반복하면서 출력
+        int count = Preference.getCount(this);
+        for(int i=1; i<=count; i++){
+            String memo = Preference.read("memo_"+i,this);
+            Log.d("SimpleMemo","no="+i+", "+memo);
+        }
+
     }
 
     // 액티비티 이동
