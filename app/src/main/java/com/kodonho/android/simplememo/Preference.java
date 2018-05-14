@@ -23,16 +23,21 @@ public class Preference {
         pref.edit().putInt(COUNT, count).commit();
         return count;
     }
-    // 메모쓰기
-    public static void write(String memo, Context context){
-        int count = increaseCount(context); // 메모번호를 가져오고
-        String key = "memo_"+count;
+    // 메모수정
+    public static void modify(String key, String memo, Context context){
         // 1.2. 현재 날짜시간을 가져온다
         long now = System.currentTimeMillis();
         memo = memo + DELIMETER + now;
         memo = memo + DELIMETER + key;
         SharedPreferences sharedPref = context.getSharedPreferences(FILENAME,Context.MODE_PRIVATE);
         sharedPref.edit().putString(key, memo).commit();
+    }
+    // 메모쓰기
+    public static void write(String memo, Context context){
+        int count = increaseCount(context); // 메모번호를 가져오고
+        String key = "memo_"+count;
+        // 1.2. 현재 날짜시간을 가져온다
+        modify(key, memo, context);
     }
     // 메모삭제
     public static void remove(String key, Context context){

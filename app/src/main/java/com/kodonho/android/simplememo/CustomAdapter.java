@@ -19,8 +19,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Holder> {
     // 4. 아답터에서 사용할 데이터 선언
     List<String> list = new ArrayList<>();
     SimpleDateFormat sdf;
+    MainActivity activity;
 
-    public CustomAdapter() {
+    public CustomAdapter(MainActivity activity) {
+        this.activity = activity;
         sdf = new SimpleDateFormat("yyyy-MM-dd");
     }
     // 8. 아답터에 데이터를 세팅하고 아답터를 갱신한다
@@ -65,6 +67,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Holder> {
         return list.size();
     }
 
+    // Activity와의 결합도를 낮추기 위한 인터페이스 설계
+    // 구현은 각자...
+    public interface Callback {
+        public void goEdit(String key);
+    }
+
     // 1. Holder를 먼저 만든다 - 아이템 레이아웃 관리
     public class Holder extends RecyclerView.ViewHolder{
         // 2. 아이템 레이아웃에서 사용하는 위젯을 모두 선언
@@ -81,17 +89,31 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Holder> {
             textMemo = itemView.findViewById(R.id.textMemo);
             textDate = itemView.findViewById(R.id.textDate);
             item = itemView.findViewById(R.id.item);
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    activity.goEdit(key);
+                }
+            });
+
             btnDel = itemView.findViewById(R.id.btnDelete);
             btnDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 삭제처리
                     Preference.remove(key, v.getContext());
+                    // 삭제된 데이터에 한해서 처리
                     list.remove(position);
+                    // 화면아이템 한개 삭제
+                    notifyItemRemoved(position);
+                    // 삭제아이템 이하 모두 변경처리
+                    notifyItemRangeChanged(position, list.size());
                     // 화면 갱신
-                    notifyDataSetChanged();
+                    //가.데이터 새로 가져오기
+                    //나.notifyDataSetChanged();
                 }
             });
         }
     }
+
 }
