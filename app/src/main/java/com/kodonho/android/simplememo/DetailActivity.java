@@ -15,7 +15,7 @@ public class DetailActivity extends AppCompatActivity {
     }
     // 저장 버튼
     public void save(View view){
-        // 1.화면에서 입력된 글자를 가져오고
+        // 1.1. 화면에서 입력된 글자를 가져오고
         String memo = editMemo.getText().toString();
         // 2.핸드폰에 글자를 저장한다
         Preference.write(memo,this);

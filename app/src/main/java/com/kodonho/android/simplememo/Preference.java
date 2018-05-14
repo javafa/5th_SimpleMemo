@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Preference {
+    public static final String DELIMETER = ":::";
     private static final String FILENAME = "simplememo";
     private static final String COUNT = "COUNT";
     // 최종 메모 번호 읽기
@@ -26,8 +27,17 @@ public class Preference {
     public static void write(String memo, Context context){
         int count = increaseCount(context); // 메모번호를 가져오고
         String key = "memo_"+count;
+        // 1.2. 현재 날짜시간을 가져온다
+        long now = System.currentTimeMillis();
+        memo = memo + DELIMETER + now;
+        memo = memo + DELIMETER + key;
         SharedPreferences sharedPref = context.getSharedPreferences(FILENAME,Context.MODE_PRIVATE);
         sharedPref.edit().putString(key, memo).commit();
+    }
+    // 메모삭제
+    public static void remove(String key, Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(FILENAME,Context.MODE_PRIVATE);
+        sharedPref.edit().remove(key).commit();
     }
     // 메모읽기
     public static String read(String key, Context context){
@@ -40,7 +50,10 @@ public class Preference {
         List<String> result = new ArrayList<>();
         int count = Preference.getCount(context);
         for(int i=1; i<=count; i++){
-            result.add(Preference.read("memo_"+i,context));
+            // 중간에 데이터가 삭제되었으면 목록에 더하지 않는다
+            String memo = Preference.read("memo_"+i,context);
+            if(memo != null && !"".equals(memo))
+                result.add(memo);
         }
         return result;
     }
