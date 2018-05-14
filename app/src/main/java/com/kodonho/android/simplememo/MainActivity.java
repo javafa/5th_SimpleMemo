@@ -11,7 +11,7 @@ import android.view.View;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements CustomAdapter.Callback{
 
     RecyclerView recyclerView;
     CustomAdapter adapter;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity{
             // cancel 처리
         }
     }
-
+    @Override
     public void goEdit(String memoKey) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.MODE, DetailActivity.MODE_EDIT);

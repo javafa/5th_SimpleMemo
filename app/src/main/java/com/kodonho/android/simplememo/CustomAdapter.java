@@ -19,10 +19,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Holder> {
     // 4. 아답터에서 사용할 데이터 선언
     List<String> list = new ArrayList<>();
     SimpleDateFormat sdf;
-    MainActivity activity;
+    Callback callback;
 
-    public CustomAdapter(MainActivity activity) {
-        this.activity = activity;
+    public CustomAdapter(Callback callback) {
+        this.callback = callback;
         sdf = new SimpleDateFormat("yyyy-MM-dd");
     }
     // 8. 아답터에 데이터를 세팅하고 아답터를 갱신한다
@@ -92,7 +92,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Holder> {
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.goEdit(key);
+                    callback.goEdit(key);
                 }
             });
 
